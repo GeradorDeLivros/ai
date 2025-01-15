@@ -13,12 +13,12 @@ import asyncio
 from queue import Queue
 import sqlite3
 from datetime import datetime
-from flask_cors import CORS
+# from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 progress_queue = Queue()
 
