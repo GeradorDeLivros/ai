@@ -15,16 +15,15 @@ COPY . .
 
 # Set environment variables
 ENV FLASK_APP=app.py
+ENV FLASK_ENV=production  # Ensure Flask runs in production mode
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=5151
+
+# Install Gunicorn (production-ready server)
+RUN pip install gunicorn
 
 # Expose the port the app runs on
 EXPOSE 5151
 
-# Debug: List files in the working directory
-RUN ls -la /app
-
-# Debug: Print FLASK_APP variable
-RUN echo $FLASK_APP
-
-# Run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5151"]
+# Run the Flask app using Gunicorn (which is production-ready)
+CMD ["gunicorn", "-b", "0.0.0.0:5151", "app:app"]
