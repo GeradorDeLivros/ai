@@ -1,0 +1,10 @@
+flask
+openai
+reportlab
+fpdf
+aiohttp
+PyGithub==1.55
+python-dotenv
+flask[async]
+together
+
