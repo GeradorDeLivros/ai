@@ -27,4 +27,4 @@ RUN ls -la /app
 RUN echo $FLASK_APP
 
 # Run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5151"]
