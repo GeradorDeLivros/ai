@@ -13,6 +13,8 @@ import asyncio
 from queue import Queue
 import sqlite3
 from datetime import datetime
+from flask import send_from_directory
+
 # from flask_cors import CORS
 
 load_dotenv()
@@ -269,6 +271,13 @@ def link_pdf():
         app.logger.error(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
 
+@app.route('/saved_pdfs/<filename>')
+def serve_pdf(filename):
+    folder = 'saved_pdfs'  # O diretório onde os PDFs são armazenados
+    try:
+        return send_from_directory(folder, filename, as_attachment=False)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
 
 @app.route('/progress')
 def progress():
