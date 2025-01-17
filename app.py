@@ -229,7 +229,7 @@ def download_pdf():
         return jsonify({'error': str(e)}), 500
     
 @app.route('/link-pdf', methods=['POST'])
-def download_pdf():
+def link_pdf():
     auth_response = check_auth()
     if auth_response:
         return auth_response
