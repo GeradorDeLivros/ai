@@ -188,7 +188,7 @@ async def generate_book():
     })
 
 
-@app.route('/download-pdf', methods=['POST'])
+@app.route('/download-pdfx', methods=['POST'])
 def download_pdf():
 
     auth_response = check_auth()
@@ -262,7 +262,6 @@ def link_pdf():
         with open(filepath, 'wb') as f:
             f.write(pdf_buffer.getvalue())
         
-        # Retorna apenas a pasta e o nome do arquivo
         return jsonify({"folder": folder, "filename": filename}), 200
     
     except Exception as e:
