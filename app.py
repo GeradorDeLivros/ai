@@ -227,6 +227,48 @@ def download_pdf():
         app.logger.error(f"PDF download error: {str(e)}")
         app.logger.error(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/link-pdf', methods=['POST'])
+def download_pdf():
+    auth_response = check_auth()
+    if auth_response:
+        return auth_response
+
+    try:
+        if not request.json:
+            return jsonify({"error": "Request body must be JSON"}), 400
+        
+        if 'content' not in request.json or 'title' not in request.json:
+            return jsonify({"error": "Missing required fields: 'content' and/or 'title'"}), 400
+        
+        content = request.json['content']
+        title = request.json['title']
+        
+        if not isinstance(content, str) or not content.strip():
+            return jsonify({"error": "Field 'content' must be a non-empty string"}), 400
+        
+        if not isinstance(title, str) or not title.strip():
+            return jsonify({"error": "Field 'title' must be a non-empty string"}), 400
+        
+        pdf_buffer = create_pdf(content, title)
+        
+        ip = request.remote_addr
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{ip}_{timestamp}.pdf"
+        folder = 'saved_pdfs'
+        filepath = os.path.join(folder, filename)
+        os.makedirs(folder, exist_ok=True)
+        
+        with open(filepath, 'wb') as f:
+            f.write(pdf_buffer.getvalue())
+        
+        # Retorna apenas a pasta e o nome do arquivo
+        return jsonify({"folder": folder, "filename": filename}), 200
+    
+    except Exception as e:
+        app.logger.error(f"PDF download error: {str(e)}")
+        app.logger.error(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/progress')
