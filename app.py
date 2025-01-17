@@ -188,7 +188,7 @@ async def generate_book():
     })
 
 
-@app.route('/download-pdfx', methods=['POST'])
+@app.route('/download-pdf', methods=['POST'])
 def download_pdf():
 
     auth_response = check_auth()
