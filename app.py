@@ -1,4 +1,5 @@
 import os
+import re
 from dotenv import load_dotenv
 import time
 import traceback
@@ -30,6 +31,10 @@ if not TOGETHER_API_KEY:
     raise ValueError("No Together API key found. Please set the TOGETHER_API_KEY environment variable.")
 
 together_client = Together(api_key=TOGETHER_API_KEY)
+
+def markdown_to_html(content):
+    content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
+    return content
 
 async def generate_chunk(api, model, topic, current_word_count, language, is_new_chapter=False):
     if is_new_chapter:
@@ -251,6 +256,9 @@ def link_pdf():
         
         if not isinstance(title, str) or not title.strip():
             return jsonify({"error": "Field 'title' must be a non-empty string"}), 400
+        
+        # Converter o conteúdo Markdown para HTML
+        content = markdown_to_html(content)
         
         pdf_buffer = create_pdf(content, title)
         
